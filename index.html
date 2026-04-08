@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Morehouse College Athletic Alumni Registry</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --maroon: #8B2433;
+      --maroon-dark: #6B1A27;
+      --maroon-light: #A83245;
+      --cream: #FDF8F0;
+      --gold: #C4A035;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    ::selection { background: rgba(139,36,51,0.2); }
+
+    body {
+      font-family: 'DM Sans', Helvetica, Arial, sans-serif;
+      background: var(--cream);
+      color: #333;
+      min-height: 100vh;
+    }
+
+    /* ── HEADER ── */
+    .header {
+      background: linear-gradient(135deg, var(--maroon) 0%, var(--maroon-dark) 100%);
+      padding: 32px 24px 0;
+    }
+    .header-inner { max-width: 720px; margin: 0 auto; }
+    .header-top { display: flex; align-items: center; gap: 16px; margin-bottom: 8px; }
+    .header-icon {
+      width: 56px; height: 56px; border-radius: 50%;
+      background: rgba(255,255,255,0.15);
+      display: flex; align-items: center; justify-content: center;
+      border: 2px solid rgba(255,255,255,0.3);
+      font-size: 26px; flex-shrink: 0;
+    }
+    .header h1 {
+      color: #fff; font-size: 28px; font-weight: 700;
+      font-family: 'Playfair Display', Georgia, serif;
+      line-height: 1.2;
+    }
+    .header .subtitle {
+      color: rgba(255,255,255,0.8); font-size: 14px;
+      letter-spacing: 3px; text-transform: uppercase;
+      margin-top: 2px;
+    }
+    .header .motto {
+      color: rgba(255,255,255,0.6); font-size: 12px;
+      margin: 8px 0 24px;
+      border-left: 3px solid var(--gold);
+      padding-left: 12px;
+      font-style: italic;
+    }
+
+    /* ── FORM CARD ── */
+    .form-card {
+      max-width: 720px;
+      margin: -20px auto 40px;
+      background: #fff;
+      border-radius: 14px;
+      padding: 36px 40px;
+      box-shadow: 0 4px 30px rgba(0,0,0,0.08);
+      border: 1px solid #eee;
+      position: relative;
+      z-index: 1;
+    }
+    .form-card h2 {
+      font-size: 22px; color: var(--maroon);
+      font-family: 'Playfair Display', Georgia, serif;
+      margin-bottom: 6px;
+    }
+    .form-card .intro {
+      font-size: 14px; color: #666; margin-bottom: 28px; line-height: 1.6;
+    }
+
+    /* ── FIELDS ── */
+    .field { margin-bottom: 20px; }
+    .field label {
+      display: block; font-size: 12px; font-weight: 600;
+      color: #444; margin-bottom: 6px;
+      text-transform: uppercase; letter-spacing: 0.8px;
+    }
+    .field label .req { color: var(--maroon); }
+
+    .field input, .field select {
+      width: 100%; padding: 11px 14px;
+      font-size: 14px; font-family: 'DM Sans', Helvetica, sans-serif;
+      border: 1.5px solid #ddd; border-radius: 8px;
+      outline: none; transition: all 0.2s;
+      background: #fff; color: #222;
+    }
+    .field input:focus, .field select:focus {
+      border-color: var(--maroon);
+      box-shadow: 0 0 0 3px rgba(139,36,51,0.1);
+    }
+    .field input::placeholder { color: #bbb; }
+    .field select { appearance: none; cursor: pointer;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23666' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 12px center;
+      padding-right: 36px;
+    }
+    .field select option[value=""] { color: #bbb; }
+
+    .row { display: flex; gap: 16px; flex-wrap: wrap; }
+    .row .col-2 { flex: 2 1 250px; }
+    .row .col-1 { flex: 1 1 140px; }
+    .row .col-sm { flex: 1 1 100px; }
+
+    .divider {
+      border-top: 1px solid #eee;
+      margin: 8px 0 24px;
+      position: relative;
+    }
+    .divider span {
+      position: absolute; top: -10px; left: 16px;
+      background: #fff; padding: 0 8px;
+      font-size: 11px; color: #bbb;
+      text-transform: uppercase; letter-spacing: 1px;
+    }
+
+    .field-other { display: none; }
+    .field-other.visible { display: block; }
+
+    /* ── BUTTON ── */
+    .submit-btn {
+      width: 100%; padding: 14px;
+      font-size: 15px; font-weight: 700;
+      color: #fff;
+      background: linear-gradient(135deg, var(--maroon) 0%, var(--maroon-light) 100%);
+      border: none; border-radius: 10px;
+      cursor: pointer; letter-spacing: 0.5px;
+      font-family: 'DM Sans', Helvetica, sans-serif;
+      transition: all 0.2s;
+      margin-top: 8px;
+    }
+    .submit-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 16px rgba(139,36,51,0.3); }
+    .submit-btn:active { transform: translateY(0); }
+    .submit-btn:disabled { background: #ccc; cursor: not-allowed; transform: none; box-shadow: none; }
+
+    /* ── STATUS MESSAGES ── */
+    .status {
+      margin-top: 16px; padding: 14px 18px;
+      border-radius: 8px; font-size: 14px;
+      text-align: center; font-weight: 600;
+      display: none;
+    }
+    .status.success { display: block; background: #E8F5E9; color: #2E7D32; }
+    .status.error { display: block; background: #FFEBEE; color: #C62828; }
+    .status.loading { display: block; background: #FFF3E0; color: #E65100; }
+
+    /* ── FOOTER ── */
+    .footer {
+      text-align: center; padding: 24px;
+      border-top: 1px solid #e8e0d8;
+      font-size: 11px; color: #aaa;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 600px) {
+      .form-card { padding: 24px 20px; margin: -16px 12px 32px; }
+      .header { padding: 24px 16px 0; }
+      .header h1 { font-size: 22px; }
+      .row { flex-direction: column; gap: 0; }
+      .row .col-2, .row .col-1, .row .col-sm { flex: 1 1 100%; }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-in { animation: fadeIn 0.4s ease; }
+  </style>
+</head>
+<body>
+
+  <!-- ═══════════════════ HEADER ═══════════════════ -->
+  <div class="header">
+    <div class="header-inner">
+      <div class="header-top">
+        <div class="header-icon">🏛</div>
+        <div>
+          <h1>Morehouse College</h1>
+          <div class="subtitle">Athletic Alumni Registry</div>
+        </div>
+      </div>
+      <div class="motto">"And there was light." — Strengthening the Maroon Tiger legacy through connection.</div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════ FORM ═══════════════════ -->
+  <div class="form-card animate-in">
+    <h2>Welcome, Maroon Tiger</h2>
+    <p class="intro">
+      Register below to join the Morehouse Athletic Alumni network. Your information
+      helps us strengthen the legacy of Morehouse Athletics and keep our community connected.
+    </p>
+
+    <form id="alumniForm" onsubmit="return false;">
+
+      <!-- Name + Year -->
+      <div class="row">
+        <div class="field col-2">
+          <label>Full Name <span class="req">*</span></label>
+          <input type="text" id="fullName" placeholder="e.g. James A. Williams" required>
+        </div>
+        <div class="field col-1">
+          <label>Year Graduated <span class="req">*</span></label>
+          <select id="yearGraduated" required>
+            <option value="">Select year</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Sport -->
+      <div class="field">
+        <label>Sport <span class="req">*</span></label>
+        <select id="sport" required onchange="toggleOther()">
+          <option value="">Select your sport</option>
+          <option value="Football">Football</option>
+          <option value="Basketball">Basketball</option>
+          <option value="Baseball">Baseball</option>
+          <option value="Track & Field">Track &amp; Field</option>
+          <option value="Cross Country">Cross Country</option>
+          <option value="Tennis">Tennis</option>
+          <option value="Golf">Golf</option>
+          <option value="Soccer">Soccer</option>
+          <option value="Swimming">Swimming</option>
+          <option value="Wrestling">Wrestling</option>
+          <option value="Volleyball">Volleyball</option>
+          <option value="Lacrosse">Lacrosse</option>
+          <option value="Other">Other</option>
+        </select>
+      </div>
+      <div class="field field-other" id="otherSportField">
+        <label>Specify Sport</label>
+        <input type="text" id="sportOther" placeholder="Enter sport name">
+      </div>
+
+      <!-- Divider -->
+      <div class="divider"><span>Contact Information</span></div>
+
+      <!-- Address -->
+      <div class="field">
+        <label>Street Address</label>
+        <input type="text" id="address" placeholder="123 Main Street">
+      </div>
+      <div class="row">
+        <div class="field col-2">
+          <label>City</label>
+          <input type="text" id="city" placeholder="Atlanta">
+        </div>
+        <div class="field col-sm">
+          <label>State</label>
+          <select id="state">
+            <option value="">--</option>
+          </select>
+        </div>
+        <div class="field col-sm">
+          <label>ZIP</label>
+          <input type="text" id="zip" placeholder="30314">
+        </div>
+      </div>
+
+      <!-- Phone + Email -->
+      <div class="row">
+        <div class="field col-1">
+          <label>Phone Number</label>
+          <input type="tel" id="phone" placeholder="(404) 555-0100">
+        </div>
+        <div class="field col-1">
+          <label>Email Address <span class="req">*</span></label>
+          <input type="email" id="email" placeholder="jwilliams@email.com" required>
+        </div>
+      </div>
+
+      <button type="button" class="submit-btn" id="submitBtn" onclick="submitForm()">
+        Register
+      </button>
+
+      <div class="status" id="statusMsg"></div>
+    </form>
+  </div>
+
+  <!-- ═══════════════════ FOOTER ═══════════════════ -->
+  <div class="footer">
+    Morehouse College Athletic Alumni Registry — Athletic Advisory Council &copy; <script>document.write(new Date().getFullYear())</script>
+  </div>
+
+  <!-- ═══════════════════ JAVASCRIPT ═══════════════════ -->
+  <script>
+    // ╔════════════════════════════════════════════════════════════════╗
+    // ║  IMPORTANT: Replace this URL with your deployed Apps Script  ║
+    // ║  web app URL after completing the setup guide.               ║
+    // ╚════════════════════════════════════════════════════════════════╝
+    const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwFq6IHu4-bqdvFp_N7G1AjO6gtT0-ti7MAtjCH9Wl0vjZLx83u6JyF78ee3bSTUJL0WA/exec";
+
+    // ── Populate year dropdown ──
+    (function() {
+      const sel = document.getElementById("yearGraduated");
+      const currentYear = new Date().getFullYear();
+      for (let y = currentYear; y >= currentYear - 69; y--) {
+        const opt = document.createElement("option");
+        opt.value = y; opt.textContent = y;
+        sel.appendChild(opt);
+      }
+    })();
+
+    // ── Populate state dropdown ──
+    (function() {
+      const states = [
+        "AL","AK","AZ","AR","CA","CO","CT","DE","FL","GA","HI","ID","IL","IN","IA",
+        "KS","KY","LA","ME","MD","MA","MI","MN","MS","MO","MT","NE","NV","NH","NJ",
+        "NM","NY","NC","ND","OH","OK","OR","PA","RI","SC","SD","TN","TX","UT","VT",
+        "VA","WA","WV","WI","WY","DC"
+      ];
+      const sel = document.getElementById("state");
+      states.forEach(s => {
+        const opt = document.createElement("option");
+        opt.value = s; opt.textContent = s;
+        sel.appendChild(opt);
+      });
+    })();
+
+    // ── Toggle "Other" sport field ──
+    function toggleOther() {
+      const field = document.getElementById("otherSportField");
+      const val = document.getElementById("sport").value;
+      field.classList.toggle("visible", val === "Other");
+    }
+
+    // ── Show status message ──
+    function showStatus(type, msg) {
+      const el = document.getElementById("statusMsg");
+      el.className = "status " + type;
+      el.textContent = msg;
+      if (type === "success") {
+        setTimeout(() => { el.className = "status"; }, 5000);
+      }
+    }
+
+    // ── Submit form ──
+    async function submitForm() {
+      const btn = document.getElementById("submitBtn");
+      const fullName = document.getElementById("fullName").value.trim();
+      const yearGraduated = document.getElementById("yearGraduated").value;
+      const sportSel = document.getElementById("sport").value;
+      const sportOther = document.getElementById("sportOther").value.trim();
+      const email = document.getElementById("email").value.trim();
+
+      // Validation
+      if (!fullName || !yearGraduated || !sportSel || !email) {
+        showStatus("error", "Please fill in all required fields (marked with *).");
+        return;
+      }
+
+      const sport = sportSel === "Other" && sportOther ? sportOther : sportSel;
+
+      const data = {
+        fullName: fullName,
+        yearGraduated: yearGraduated,
+        sport: sport,
+        address: document.getElementById("address").value.trim(),
+        city: document.getElementById("city").value.trim(),
+        state: document.getElementById("state").value,
+        zip: document.getElementById("zip").value.trim(),
+        phone: document.getElementById("phone").value.trim(),
+        email: email,
+        source: "Web Portal",
+        timestamp: new Date().toISOString()
+      };
+
+      // Check if URL has been configured
+      if (APPS_SCRIPT_URL === "YOUR_APPS_SCRIPT_WEB_APP_URL_HERE") {
+        showStatus("error", "Setup incomplete — the Google Apps Script URL has not been configured yet. See the setup guide.");
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = "Submitting...";
+      showStatus("loading", "Sending your registration...");
+
+      try {
+        const response = await fetch(APPS_SCRIPT_URL, {
+          method: "POST",
+          mode: "no-cors",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data)
+        });
+
+        // no-cors means we can't read the response, but if no error was thrown, it went through
+        showStatus("success", "✓ Registration submitted successfully! Welcome to the Maroon Tiger network.");
+        btn.textContent = "Register";
+        btn.disabled = false;
+
+        // Reset form
+        document.getElementById("alumniForm").reset();
+        document.getElementById("otherSportField").classList.remove("visible");
+
+      } catch (err) {
+        showStatus("error", "Something went wrong. Please try again or contact the administrator.");
+        btn.textContent = "Register";
+        btn.disabled = false;
+        console.error("Submission error:", err);
+      }
+    }
+  </script>
+</body>
+</html>
